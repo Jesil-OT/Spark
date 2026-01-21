@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Spark</string>
+    <string name="spark">SPARK ✨</string>
+    <string name="getting_started_text">Welcome. This is a quiet place for your thoughts. Take a moment, breathe deeply, and let the words meet you where you are. You don’t need to rush. Growth happens one thought at a time.</string>
+    <string name="get_started">GET STARTED!</string>
+    <string name="explore_topics">Tell us what you love</string>
+    <string name="choose_moods">Choose between 3 and 20 moods, and we will curate best quotes for your feed.</string>
+    <string name="find_your">"FIND YOUR "</string>
+</resources>
