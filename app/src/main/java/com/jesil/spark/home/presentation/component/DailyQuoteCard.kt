@@ -2,13 +2,12 @@ package com.jesil.spark.home.presentation.component
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +18,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -45,12 +42,15 @@ import com.jesil.spark.home.presentation.model.DailyCardUiModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DailyCard(
+fun DailyQuoteCard(
     modifier: Modifier = Modifier,
     dailyCardUiModel: DailyCardUiModel,
+    onCardClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable { onCardClick() },
         shape = RoundedCornerShape(30.dp),
         colors = CardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -127,7 +127,7 @@ fun DailyCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     content = {
                         IconButton(
-                            onClick = { /*TODO LIKE QUOTE*/ },
+                            onClick = onFavoriteClick,
                             content =  {
                                 Icon(
                                     imageVector = Icons.Outlined.Favorite,
@@ -137,7 +137,7 @@ fun DailyCard(
                             }
                         )
                         IconButton(
-                            onClick = { /*TODO SHARE DALIY QUOTE*/ },
+                            onClick = onShareClick,
                             content = {
                                 Icon(
                                     imageVector = Icons.Outlined.Share,
@@ -148,7 +148,7 @@ fun DailyCard(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Button(
-                            onClick = { /*TODO SAVE DAILY QUOTE*/ },
+                            onClick = onFavoriteClick,
                             content = {
                                 Text(
                                     text = "Save Quote",
@@ -193,14 +193,17 @@ fun QuoteOfTheDayShape(modifier: Modifier = Modifier) {
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Preview()
 @Composable
-private fun DailyCardPreview() {
+private fun DailyQuoteCardPreview() {
     SparkTheme {
-        DailyCard(
+        DailyQuoteCard(
             dailyCardUiModel = DailyCardUiModel(
                 quote = "Happiness is not something ready-made. It comes from your own actions.",
                 author = "Dalai Lama",
                 timeStamp = "Oct 24, 2026"
-            )
+            ),
+            onCardClick = {},
+            onFavoriteClick = {},
+            onShareClick = {}
         )
     }
 }

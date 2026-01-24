@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -38,7 +36,7 @@ import com.jesil.spark.core.theme.SparkTheme
 import com.jesil.spark.home.presentation.model.QuoteCardUiModel
 
 @Composable
-fun QuoteCard(
+fun QuoteItemCard(
     modifier: Modifier = Modifier,
     quoteCard: QuoteCardUiModel,
     onFavoriteClick: () -> Unit,
@@ -89,7 +87,7 @@ fun QuoteCard(
                                 .padding(horizontal = 16.dp),
                             style = MaterialTheme.typography.headlineSmall.copy(
                                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
-                                fontSize = 23.sp,
+                                fontSize = 24.sp,
                             ),
                             text = quoteCard.author,
                         )
@@ -147,10 +145,11 @@ fun QuoteCard(
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Preview
 @Composable
-fun QuoteCardPreview() {
+fun QuoteItemCardPreview() {
     SparkTheme {
-        QuoteCard(
+        QuoteItemCard(
             quoteCard = QuoteCardUiModel(
+                id = 0,
                 quote = "Happiness is not something ready-made. It comes from your own actions.",
                 author = "Dalai Lama",
             ),
