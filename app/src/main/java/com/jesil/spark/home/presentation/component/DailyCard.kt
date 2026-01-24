@@ -1,5 +1,6 @@
 package com.jesil.spark.home.presentation.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
@@ -30,10 +32,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jesil.spark.R
 import com.jesil.spark.core.theme.SparkTheme
 import com.jesil.spark.home.presentation.model.DailyCardUiModel
 
@@ -58,7 +64,7 @@ fun DailyCard(
         ),
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp),
+            modifier = Modifier.padding(24.dp),
             content = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -76,7 +82,13 @@ fun DailyCard(
                         )
                     }
                 )
-
+                Spacer(modifier = Modifier.padding(10.dp))
+                Icon(
+                    modifier = Modifier.size(50.dp),
+                    imageVector = ImageVector.vectorResource(R.drawable.outline_format_quote),
+                    contentDescription = stringResource(R.string.quote_icon),
+                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+                )
                 Text(
                     modifier = Modifier.padding(top = 30.dp, bottom = 16.dp),
                     text = """ "${dailyCardUiModel.quote}" """,
@@ -88,12 +100,16 @@ fun DailyCard(
                 )
                Row {
                    HorizontalDivider(
-                       modifier = Modifier.padding(vertical = 16.dp).weight(0.2f),
+                       modifier = Modifier
+                           .padding(vertical = 16.dp)
+                           .weight(0.2f),
                        thickness = 1.dp,
                        color = MaterialTheme.colorScheme.primary
                    )
                    Text(
-                       modifier = Modifier.weight(1f).padding(horizontal = 16.dp),
+                       modifier = Modifier
+                           .weight(1f)
+                           .padding(horizontal = 16.dp),
                        style = MaterialTheme.typography.headlineSmall.copy(
                            color = MaterialTheme.colorScheme.primary,
                            fontSize = 25.sp,
@@ -174,7 +190,8 @@ fun QuoteOfTheDayShape(modifier: Modifier = Modifier) {
     )
 }
 
-@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Preview()
 @Composable
 private fun DailyCardPreview() {
     SparkTheme {
