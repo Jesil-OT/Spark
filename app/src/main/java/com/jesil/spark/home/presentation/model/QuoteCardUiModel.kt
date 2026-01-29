@@ -1,7 +1,7 @@
 package com.jesil.spark.home.presentation.model
 
 data class QuoteCardUiModel(
-    val id: Int,
+    val id: String,
     val quote: String,
     val author: String,
 )

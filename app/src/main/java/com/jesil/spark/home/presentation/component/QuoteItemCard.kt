@@ -68,7 +68,7 @@ fun QuoteItemCard(
                         text = """ "${quoteCard.quote}" """,
                         style = MaterialTheme.typography.displayMedium.copy(
                             color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 32.sp,
+                            fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
                     )
@@ -87,7 +87,7 @@ fun QuoteItemCard(
                                 .padding(horizontal = 16.dp),
                             style = MaterialTheme.typography.headlineSmall.copy(
                                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
-                                fontSize = 24.sp,
+                                fontSize = 20.sp,
                             ),
                             text = quoteCard.author,
                         )
@@ -149,7 +149,7 @@ fun QuoteItemCardPreview() {
     SparkTheme {
         QuoteItemCard(
             quoteCard = QuoteCardUiModel(
-                id = 0,
+                id = "0",
                 quote = "Happiness is not something ready-made. It comes from your own actions.",
                 author = "Dalai Lama",
             ),
