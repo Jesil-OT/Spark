@@ -2,6 +2,7 @@ package com.jesil.spark.core.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -56,13 +58,19 @@ fun AppNavGraph(
             ) {
                 TopAppBar(
                         title = {
-                            Text(
-                                text = stringResource(R.string.spark),
-                                style = MaterialTheme.typography.displayMedium.copy(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 25.sp,
-                                ),
+//                            Text(
+//                                text = stringResource(R.string.spark),
+//                                style = MaterialTheme.typography.displayMedium.copy(
+//                                    color = MaterialTheme.colorScheme.primary,
+//                                    fontWeight = FontWeight.Bold,
+//                                    fontSize = 25.sp,
+//                                ),
+//                            )
+                            Icon(
+                                modifier = Modifier.size(30.dp),
+                                imageVector = ImageVector.vectorResource(R.drawable.outline_format_quote),
+                                contentDescription = stringResource(R.string.quote_icon),
+                                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
                             )
                         },
                         actions = {
@@ -116,13 +124,13 @@ fun AppNavGraph(
                             NavEntry(key){
                                 HomeScreen()
 
-                                LaunchedEffect(Unit) {
-                                    delay(2000L)
-                                    sheetState.show()
-                                    if(sheetState.isVisible){
-                                        showExploreTopics = true
-                                    }
-                                }
+//                                LaunchedEffect(Unit) {
+//                                    delay(2000L)
+//                                    sheetState.show()
+//                                    if(sheetState.isVisible){
+//                                        showExploreTopics = true
+//                                    }
+//                                }
                             }
                         }
                         Routes.Favorite -> {

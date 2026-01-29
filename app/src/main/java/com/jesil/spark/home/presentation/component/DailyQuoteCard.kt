@@ -76,25 +76,25 @@ fun DailyQuoteCard(
                             text = dailyCardUiModel.timeStamp,
                             style = MaterialTheme.typography.headlineSmall.copy(
                                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                                fontSize = 16.sp,
+                                fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         )
                     }
                 )
-                Spacer(modifier = Modifier.padding(10.dp))
+                Spacer(modifier = Modifier.padding(5.dp))
                 Icon(
-                    modifier = Modifier.size(50.dp),
+                    modifier = Modifier.size(40.dp),
                     imageVector = ImageVector.vectorResource(R.drawable.outline_format_quote),
                     contentDescription = stringResource(R.string.quote_icon),
                     tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
                 )
                 Text(
-                    modifier = Modifier.padding(top = 30.dp, bottom = 16.dp),
+                    modifier = Modifier.padding(top = 15.dp, bottom = 16.dp),
                     text = """ "${dailyCardUiModel.quote}" """,
                     style = MaterialTheme.typography.displayMedium.copy(
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 32.sp,
+                        fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )
@@ -112,7 +112,7 @@ fun DailyQuoteCard(
                            .padding(horizontal = 16.dp),
                        style = MaterialTheme.typography.headlineSmall.copy(
                            color = MaterialTheme.colorScheme.primary,
-                           fontSize = 25.sp,
+                           fontSize = 20.sp,
                        ),
                        text = dailyCardUiModel.author,
                    )
@@ -152,7 +152,10 @@ fun DailyQuoteCard(
                             content = {
                                 Text(
                                     text = "Save Quote",
-                                    style = MaterialTheme.typography.headlineSmall
+                                    style = MaterialTheme.typography.headlineSmall.copy(
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontSize = 10.sp
+                                    )
                                 )
                             }
                         )
@@ -180,7 +183,7 @@ fun QuoteOfTheDayShape(modifier: Modifier = Modifier) {
                         text = "✨ QUOTE OF THE DAY",
                         style = MaterialTheme.typography.headlineSmall.copy(
                             color = MaterialTheme.colorScheme.primary,
-                            fontSize = 16.sp,
+                            fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
                         )
                     )

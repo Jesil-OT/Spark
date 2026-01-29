@@ -11,25 +11,31 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jesil.spark.core.theme.SparkTheme
 import com.jesil.spark.home.presentation.component.DailyQuoteCard
 import com.jesil.spark.home.presentation.component.QuoteItemCard
 import com.jesil.spark.home.presentation.component.SectionHeader
+import com.jesil.spark.home.presentation.model.DailyCardUiModel
 import com.jesil.spark.home.presentation.model.fakeHomeUiModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen() {
+    val viewModel: HomeViewModel = koinViewModel()
+    val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = MaterialTheme.colorScheme.surface
     ) {
         // multi-item DSL approach
         LazyColumn(
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             content = {
                 item {
@@ -37,7 +43,7 @@ fun HomeScreen() {
                 }
                 item {
                     DailyQuoteCard(
-                        dailyCardUiModel = fakeHomeUiModel.dailyCard,
+                        dailyCardUiModel = homeUiState.quoteOfTheDay /*fakeHomeUiModel.quoteOfTheDay*/,
                         onCardClick = {},
                         onFavoriteClick = {},
                         onShareClick = {}
@@ -48,11 +54,12 @@ fun HomeScreen() {
                     Spacer(modifier = Modifier.height(8.dp))
                     SectionHeader(
                         title = "Recent Inspirations",
-                        textSize = 24.sp
+                        textSize = 24.sp,
+                        showExtra = true
                     )
                 }
                 items(
-                    items = fakeHomeUiModel.quoteCards,
+                    items = homeUiState.quotes /*fakeHomeUiModel.quotes*/,
                     // Providing a key helps with scroll performance and animations
                     key = { it.id },
                     itemContent = { quote ->
