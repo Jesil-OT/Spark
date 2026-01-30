@@ -14,7 +14,7 @@ import com.jesil.spark.home.data.local.model.QuoteEntity
         QuoteEntity::class,
         DailyQuoteEntity::class
                ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

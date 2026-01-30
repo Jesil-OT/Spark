@@ -43,7 +43,7 @@ fun HomeScreen() {
                 }
                 item {
                     DailyQuoteCard(
-                        dailyCardUiModel = homeUiState.quoteOfTheDay /*fakeHomeUiModel.quoteOfTheDay*/,
+                        dailyCardUiModel = homeUiState.quoteOfTheDay,
                         onCardClick = {},
                         onFavoriteClick = {},
                         onShareClick = {}
@@ -59,7 +59,7 @@ fun HomeScreen() {
                     )
                 }
                 items(
-                    items = homeUiState.quotes /*fakeHomeUiModel.quotes*/,
+                    items = homeUiState.quotes,
                     // Providing a key helps with scroll performance and animations
                     key = { it.id },
                     itemContent = { quote ->

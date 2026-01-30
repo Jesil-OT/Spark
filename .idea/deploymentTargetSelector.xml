@@ -4,14 +4,11 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-01-29T13:18:07.824138795Z">
+        <DropdownSelection timestamp="2026-01-30T09:26:37.041340629Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="FirebaseDirectAccess" identifier="reservation=projects/test-a80bccd1/deviceSessions/session-25zgeln8qhifx" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/jesil/.android/avd/Medium_Phone.avd" />
             </handle>
-            <template>
-              <DeviceId pluginId="FirebaseDirectAccess" type="TEMPLATE" identifier="model_id=a15/34" />
-            </template>
           </Target>
         </DropdownSelection>
         <DialogSelection />

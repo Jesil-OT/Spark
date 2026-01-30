@@ -26,19 +26,18 @@ val coreModule = module {
     }
     single {
         Retrofit.Builder()
-            .baseUrl("https://api.quotable.io/")
+            .baseUrl("https://dummyjson.com/")
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
     // Local Database (Room)
     single {
         Room.databaseBuilder(
-            androidContext(),
-            AppDatabase::class.java,
-            AppDatabase.DATABASE_NAME
-        ).build()
+                androidContext(),
+                AppDatabase::class.java,
+                AppDatabase.DATABASE_NAME
+            ).fallbackToDestructiveMigration(false).build()
     }
 
 }
