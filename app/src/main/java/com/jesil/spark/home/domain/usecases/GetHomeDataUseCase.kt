@@ -18,7 +18,7 @@ class GetHomeDataUseCase(
         ){ quoteOfTheDay, quotes ->
             HomeUiModel(
                 quoteOfTheDay = quoteOfTheDay?.toDailyCardUiModel() ?: DailyCardUiModel(quote = "", author = "", timeStamp = ""),
-                quotes = quotes.map { it.toQuoteCardUiModel() }
+                quotes = quotes.take(10).map { it.toQuoteCardUiModel() }
             )
         }
 

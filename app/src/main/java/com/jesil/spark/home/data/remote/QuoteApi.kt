@@ -9,11 +9,9 @@ import retrofit2.http.Query
 interface QuoteApi {
 
     @GET("/quotes")
-    suspend fun getQuotes(
-        @Query("page") page: Int
-    ): QuoteDto
+    suspend fun getQuotes(): QuoteDto
 
-    @GET("/random")
+    @GET("quotes/random")
     suspend fun getRandomQuote(): QuoteItemDto
 
 }

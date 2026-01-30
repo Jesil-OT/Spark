@@ -10,6 +10,7 @@ import com.jesil.spark.home.domain.model.Quote
 import com.jesil.spark.home.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 
 class HomeRepositoryImpl(
     private val quoteApi: QuoteApi,
@@ -30,15 +31,16 @@ class HomeRepositoryImpl(
 
     override suspend fun refreshQuotes() {
         // Fetch from network
-        val remoteQuotes = quoteApi.getQuotes(1)
+        val remoteQuotes = quoteApi.getQuotes()
         val remoteDailyQuote = quoteApi.getRandomQuote()
 
         // Save to cache
-        quoteDao.deleteQuotes()
-        val quoteEntities = remoteQuotes.results.map { remoteQuote -> remoteQuote.toEntity(isDailyQuote = false) }
+//        quoteDao.deleteQuotes()
+//        val quoteEntities = remoteQuotes.results.map { remoteQuote -> remoteQuote.toEntity(isDailyQuote = false) }
+        val quoteEntities = remoteQuotes.results.map { remoteQuote -> remoteQuote.toEntity() }
         quoteDao.insertQuotes(quoteEntities)
 
-        dailyQuoteDao.deleteDailyQuote()
+//        dailyQuoteDao.deleteDailyQuote()
         val dailyQuoteEntities = remoteDailyQuote.toEntityDaily(isDailyQuote = true)
         dailyQuoteDao.insertDailyQuote(dailyQuoteEntities)
 

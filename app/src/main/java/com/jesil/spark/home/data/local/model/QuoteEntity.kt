@@ -9,6 +9,4 @@ data class QuoteEntity(
     @PrimaryKey(autoGenerate = false) val id: String,
     val author: String,
     val quote: String,
-    val tags: List<String>,
-    val authorSlug: String,
 )

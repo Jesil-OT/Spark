@@ -33,10 +33,9 @@ fun SectionHeader(
                     fontWeight = FontWeight.Bold
                 )
             )
-            Spacer(modifier = Modifier.weight(1f))
             if (showExtra) {
+                Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.see_more),
                     style = MaterialTheme.typography.displayMedium.copy(
                         color = MaterialTheme.colorScheme.primary,
@@ -47,5 +46,5 @@ fun SectionHeader(
             }
         }
     )
-
 }
+

@@ -2,7 +2,9 @@ package com.jesil.spark.home.presentation.model
 
 data class HomeUiModel(
     val quoteOfTheDay: DailyCardUiModel,
-    val quotes: List<QuoteCardUiModel>
+    val quotes: List<QuoteCardUiModel>,
+    val isLoading: Boolean = false,
+    val error: String? = null
 )
 
 val fakeHomeUiModel = HomeUiModel(

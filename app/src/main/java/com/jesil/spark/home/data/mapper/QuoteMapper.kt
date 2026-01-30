@@ -11,8 +11,6 @@ fun DailyQuoteEntity.toDomain(): Quote {
         id = this.id,
         author = this.author,
         quote = this.quote,
-        tags = this.tags,
-        authorSlug = this.authorSlug,
         isQuoteOfTheDay = false
     )
 }
@@ -22,8 +20,6 @@ fun QuoteEntity.toDomain(): Quote{
         id = this.id,
         author = this.author,
         quote = this.quote,
-        tags = this.tags,
-        authorSlug = this.authorSlug,
         isQuoteOfTheDay = false
     )
 }
@@ -33,8 +29,6 @@ fun QuoteItemDto.toEntity(isDailyQuote: Boolean = false): QuoteEntity{
         id = this.id,
         author = this.author,
         quote = this.quote,
-        tags = this.tags,
-        authorSlug = this.authorSlug,
     )
 }
 
@@ -43,8 +37,6 @@ fun QuoteItemDto.toEntityDaily(isDailyQuote: Boolean = false): DailyQuoteEntity{
         id = this.id,
         author = this.author,
         quote = this.quote,
-        tags = this.tags,
-        authorSlug = this.authorSlug,
         date = System.currentTimeMillis()
     )
 }

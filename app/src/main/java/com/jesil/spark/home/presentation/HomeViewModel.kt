@@ -9,6 +9,7 @@ import com.jesil.spark.home.presentation.model.HomeUiModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class HomeViewModel(
     private val getHomeDataUseCase: GetHomeDataUseCase,
@@ -25,6 +26,7 @@ class HomeViewModel(
     )
     init {
         refreshQuotes()
+        Timber.tag("HomeViewModel").d( "Fetched ${homeUiState.value.quotes} quotes")
     }
 
     private fun refreshQuotes() {
