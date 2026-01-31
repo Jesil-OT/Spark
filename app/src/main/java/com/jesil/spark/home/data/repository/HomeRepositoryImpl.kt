@@ -36,8 +36,7 @@ class HomeRepositoryImpl(
 
         // Save to cache
 //        quoteDao.deleteQuotes()
-//        val quoteEntities = remoteQuotes.results.map { remoteQuote -> remoteQuote.toEntity(isDailyQuote = false) }
-        val quoteEntities = remoteQuotes.results.map { remoteQuote -> remoteQuote.toEntity() }
+        val quoteEntities = remoteQuotes.results.map { remoteQuote -> remoteQuote.toEntity(isDailyQuote = false) }
         quoteDao.insertQuotes(quoteEntities)
 
 //        dailyQuoteDao.deleteDailyQuote()

@@ -1,10 +1,13 @@
 package com.jesil.spark.home.presentation.model
 
+
+sealed interface HomeUiState{
+    object Loading: HomeUiState
+    data class Success(val homeUiModel: HomeUiModel): HomeUiState
+}
 data class HomeUiModel(
     val quoteOfTheDay: DailyCardUiModel,
     val quotes: List<QuoteCardUiModel>,
-    val isLoading: Boolean = false,
-    val error: String? = null
 )
 
 val fakeHomeUiModel = HomeUiModel(
