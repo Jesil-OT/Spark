@@ -5,6 +5,7 @@ import com.jesil.spark.home.presentation.mapper.toDailyCardUiModel
 import com.jesil.spark.home.presentation.mapper.toQuoteCardUiModel
 import com.jesil.spark.home.presentation.model.DailyCardUiModel
 import com.jesil.spark.home.presentation.model.HomeUiModel
+import com.jesil.spark.home.presentation.model.HomeUiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
@@ -23,4 +24,5 @@ class GetHomeDataUseCase(
         }
 
     }
+
 }
