@@ -8,6 +8,7 @@ import com.jesil.spark.home.presentation.model.DailyCardUiModel
 import com.jesil.spark.home.presentation.model.HomeUiModel
 import com.jesil.spark.home.presentation.model.HomeUiState
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -36,6 +37,7 @@ class HomeViewModel(
     val events = _events.receiveAsFlow()
     val homeUiState: StateFlow<HomeUiState> = getHomeDataUseCase().map { homeData ->
         if (homeData.quotes.isEmpty() && homeData.quoteOfTheDay.quote.isEmpty()) {
+            delay(10000L)
             HomeUiState.Loading
         } else {
             HomeUiState.Success(homeData)

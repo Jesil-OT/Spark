@@ -2,6 +2,7 @@ package com.jesil.spark.home.presentation
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jesil.spark.core.theme.SparkTheme
 import com.jesil.spark.home.presentation.component.DailyQuoteCard
+import com.jesil.spark.home.presentation.component.HomeLoading
 import com.jesil.spark.home.presentation.component.QuoteItemCard
 import com.jesil.spark.home.presentation.component.SectionHeader
 import com.jesil.spark.home.presentation.model.DailyCardUiModel
@@ -59,14 +61,7 @@ fun HomeScreen() {
             when (val currentState = homeUiState) {
                 is HomeUiState.Loading -> {
                     // Show a loading indicator or placeholder
-                    Box(
-                        Modifier
-                            .padding(paddingValues)
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ){
-                        CircularProgressIndicator()
-                    }
+                    HomeLoading()
                 }
                 is HomeUiState.Success -> {
                     HomeInnerScreen(
@@ -101,6 +96,7 @@ fun HomeScreen() {
 
 @Composable
 fun HomeInnerScreen(
+    modifier: Modifier = Modifier,
     homeUiModel: HomeUiModel,
     onCardClick: () -> Unit,
     onFavoriteClick: () -> Unit,
@@ -109,6 +105,7 @@ fun HomeInnerScreen(
 ) {
     // multi-item DSL approach
     LazyColumn(
+        modifier = modifier,
         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         content = {
@@ -156,6 +153,7 @@ fun HomeInnerScreen(
 fun HomeScreenPreview() {
     SparkTheme {
         HomeInnerScreen(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface),
             homeUiModel = fakeHomeUiModel,
             onCardClick = {},
             onFavoriteClick = {},
