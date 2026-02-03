@@ -2,11 +2,13 @@ package com.jesil.spark.home.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
@@ -23,12 +25,32 @@ import com.jesil.spark.core.ui.ShimmerEffect
 fun HomeLoading(
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp),
+    Column(
+        modifier = modifier.padding(horizontal = 24.dp, vertical = 0.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         content = {
-            item {
+            ShimmerEffect(
+                modifier = Modifier
+                    .height(30.dp)
+                    .width(70.dp),
+                durationMillis = 1000
+            )
+            ShimmerEffect(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
+                durationMillis = 1000
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                ShimmerEffect(
+                    modifier = Modifier
+                        .height(30.dp)
+                        .width(70.dp),
+                    durationMillis = 1000
+                )
+                Spacer(modifier = Modifier.weight(1f))
                 ShimmerEffect(
                     modifier = Modifier
                         .height(30.dp)
@@ -36,39 +58,17 @@ fun HomeLoading(
                     durationMillis = 1000
                 )
             }
-            item {
+
+            repeat(20) {
                 ShimmerEffect(
-                    modifier = Modifier.fillMaxWidth().height(300.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp),
                     durationMillis = 1000
                 )
+                Spacer(modifier = Modifier.height(16.dp))
             }
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                Row {
-                    ShimmerEffect(
-                        modifier = Modifier
-                            .height(30.dp)
-                            .width(70.dp),
-                        durationMillis = 1000
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    ShimmerEffect(
-                        modifier = Modifier
-                            .height(30.dp)
-                            .width(70.dp),
-                        durationMillis = 1000
-                    )
-                }
-            }
-            item {
-                repeat(20) {
-                    ShimmerEffect(
-                        modifier = Modifier.fillMaxWidth().height(300.dp),
-                        durationMillis = 1000
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
+
         }
     )
 
