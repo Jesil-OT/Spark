@@ -1,5 +1,6 @@
 package com.jesil.spark.home.presentation.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +20,8 @@ import com.jesil.spark.R
 fun SectionHeader(
     title: String,
     textSize: TextUnit = 28.sp,
-    showExtra: Boolean = false
+    showExtra: Boolean = false,
+    onExtraClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -36,6 +38,7 @@ fun SectionHeader(
             if (showExtra) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
+                    modifier = Modifier.clickable { onExtraClick() },
                     text = stringResource(R.string.see_more),
                     style = MaterialTheme.typography.displayMedium.copy(
                         color = MaterialTheme.colorScheme.primary,

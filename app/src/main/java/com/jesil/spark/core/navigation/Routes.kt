@@ -10,4 +10,5 @@ sealed class Routes: NavKey {
     @Serializable data object Home: Routes()
     @Serializable data object Favorite: Routes()
     @Serializable data object Settings: Routes()
+    @Serializable data object MoreQuotes: Routes()
 }

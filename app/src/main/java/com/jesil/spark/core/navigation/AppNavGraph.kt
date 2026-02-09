@@ -8,11 +8,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,9 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -35,7 +31,6 @@ import com.jesil.spark.favorites.presentation.FavoritesScreen
 import com.jesil.spark.home.presentation.HomeScreen
 import com.jesil.spark.onboarding.presentation.GetStartedScreen
 import com.jesil.spark.settings.presentation.SettingsScreen
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -122,15 +117,9 @@ fun AppNavGraph(
                         }
                         Routes.Home -> {
                             NavEntry(key){
-                                HomeScreen()
-
-//                                LaunchedEffect(Unit) {
-//                                    delay(2000L)
-//                                    sheetState.show()
-//                                    if(sheetState.isVisible){
-//                                        showExploreTopics = true
-//                                    }
-//                                }
+                                HomeScreen(){
+                                    backStack.add(Routes.MoreQuotes)
+                                }
                             }
                         }
                         Routes.Favorite -> {
@@ -141,6 +130,11 @@ fun AppNavGraph(
                         Routes.Settings -> {
                             NavEntry(key){
                                 SettingsScreen()
+                            }
+                        }
+                        Routes.MoreQuotes -> {
+                            NavEntry(key) {
+                                // MoreQuotesScreen()
                             }
                         }
                         else -> error("Unknown route: $key")
