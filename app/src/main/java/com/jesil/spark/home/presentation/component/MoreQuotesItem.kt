@@ -84,8 +84,9 @@ fun MoreQuotesItem(
                         text = """ "${quoteItem.quote}" """,
                         style = MaterialTheme.typography.displayMedium.copy(
                             color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 15.sp,
+                            fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
+                            lineHeight = 22.sp
                         )
                     )
                     Row(
@@ -104,7 +105,8 @@ fun MoreQuotesItem(
                                 .padding(horizontal = 16.dp),
                             style = MaterialTheme.typography.headlineSmall.copy(
                                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
-                                fontSize = 10.sp,
+                                fontSize = 13.sp,
+                                lineHeight = 16.sp,
                             ),
                             text = quoteItem.author,
                         )

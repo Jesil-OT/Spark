@@ -48,7 +48,9 @@ fun MoreQuotesScreenInner(
     )
 }
 
-@Preview
+@Preview(
+    device = "id:pixel_8_pro",
+)
 @Composable
 private fun MoreQuotesScreenPreview() {
     SparkTheme {

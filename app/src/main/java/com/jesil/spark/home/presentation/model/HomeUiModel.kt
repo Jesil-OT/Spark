@@ -19,7 +19,7 @@ val fakeHomeUiModel = HomeUiModel(
     quotes = (1..100).map {
         QuoteCardUiModel(
             id = it.toString(),
-            quote = "Be who you are and say what you feel, because those who mind don't matter, and those who matter don't mind.",
+            quote = "Happiness is not something ready-made. It comes from your own actions.",
             author = "Bernard M. Baruch",
         )
     }
