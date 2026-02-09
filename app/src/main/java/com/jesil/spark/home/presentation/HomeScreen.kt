@@ -43,7 +43,9 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onMoreQuotesClick: () -> Unit = {},
+) {
     val viewModel: HomeViewModel = koinViewModel()
     val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsStateWithLifecycle(initialValue = null)
@@ -69,7 +71,8 @@ fun HomeScreen() {
                         onCardClick = { },
                         onFavoriteClick = { },
                         onShareClick = { },
-                        onRefreshClick = {}
+                        onRefreshClick = {},
+                        onSeeMoreClick = onMoreQuotesClick,
                     )
                 }
             }
@@ -101,7 +104,8 @@ fun HomeInnerScreen(
     onCardClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     onShareClick: () -> Unit,
-    onRefreshClick: () -> Unit
+    onRefreshClick: () -> Unit,
+    onSeeMoreClick: () -> Unit
 ) {
     // multi-item DSL approach
     LazyColumn(
@@ -126,7 +130,8 @@ fun HomeInnerScreen(
                 SectionHeader(
                     title = "Recent Inspirations",
                     textSize = 24.sp,
-                    showExtra = true
+                    showExtra = true,
+                    onExtraClick = onSeeMoreClick
                 )
             }
             items(
@@ -158,7 +163,8 @@ fun HomeScreenPreview() {
             onCardClick = {},
             onFavoriteClick = {},
             onShareClick = {},
-            onRefreshClick = {}
+            onRefreshClick = {},
+            onSeeMoreClick = {}
         )
     }
 }

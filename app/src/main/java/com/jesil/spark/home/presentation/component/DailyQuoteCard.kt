@@ -95,7 +95,8 @@ fun DailyQuoteCard(
                     style = MaterialTheme.typography.displayMedium.copy(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 25.sp
                     )
                 )
                Row {
