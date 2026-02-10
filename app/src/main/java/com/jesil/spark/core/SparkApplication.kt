@@ -2,6 +2,7 @@ package com.jesil.spark.core
 
 import android.app.Application
 import com.jesil.spark.core.di.coreModule
+import com.jesil.spark.home.di.allQuotesModule
 import com.jesil.spark.home.di.homeModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -13,7 +14,7 @@ class SparkApplication: Application() {
         Timber.plant(Timber.DebugTree())
         startKoin {
             androidContext(this@SparkApplication)
-            modules(coreModule, homeModule)
+            modules(coreModule, homeModule, allQuotesModule)
         }
     }
 }

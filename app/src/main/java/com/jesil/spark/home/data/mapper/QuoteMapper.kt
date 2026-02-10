@@ -40,3 +40,12 @@ fun QuoteItemDto.toEntityDaily(isDailyQuote: Boolean = false): DailyQuoteEntity{
         date = System.currentTimeMillis()
     )
 }
+
+fun QuoteItemDto.toDomainEntity(isDailyQuote: Boolean = false): Quote{
+    return Quote(
+        id = this.id,
+        author = this.author,
+        quote = this.quote,
+        isQuoteOfTheDay = false
+    )
+}

@@ -19,3 +19,5 @@ fun Quote.toDailyCardUiModel(): DailyCardUiModel {
         timeStamp = this.date.toString()
     )
 }
+
+fun List<Quote>.toUiModels() = map { it.toQuoteCardUiModel() }
