@@ -1,6 +1,12 @@
 package com.jesil.spark.home.presentation
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,9 +15,15 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -19,7 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jesil.spark.core.theme.SparkTheme
+import com.jesil.spark.core.ui.ErrorScreen
 import com.jesil.spark.core.ui.UiState
+import com.jesil.spark.home.presentation.component.MoreQuoteLoading
 import com.jesil.spark.home.presentation.component.MoreQuotesItem
 import com.jesil.spark.home.presentation.component.SectionHeader
 import com.jesil.spark.home.presentation.model.HomeUiModel
@@ -31,27 +45,54 @@ import org.koin.androidx.compose.koinViewModel
 fun MoreQuotesScreen() {
     val viewModel : MoreQuotesViewModel = koinViewModel()
     val state by viewModel.allQuotes.collectAsStateWithLifecycle()
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.surface,
-        content = {
-           when(val uiState = state){
-               is UiState.Loading -> {
-                   // Show a loading indicator or placeholder
-               }
-               is UiState.Error -> {
-
-               }
-               is UiState.Success -> {
-                   MoreQuotesScreenInner(
-                       moreQuotes = uiState.data,
-                   )
-               }
-           }
+    val snackbarHostState = remember { SnackbarHostState() }
+    // Listen for one-time error events
+    LaunchedEffect(Unit) {
+        viewModel.errorEvents.collect { message ->
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short,
+                actionLabel = "Retry"
+            )
         }
-    )
+    }
 
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { padding ->
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.surface,
+            content = {
+                AnimatedContent(
+                    targetState = state,
+                    transitionSpec = {
+                        // Defines a fade-in with a slight scale up for the new content,
+                        // and a fade-out for the old content.
+                        (fadeIn(animationSpec = tween(500)) + scaleIn(initialScale = 0.92f))
+                            .togetherWith(fadeOut(animationSpec = tween(400)))
+                    },
+                    label = "UiStateAnimation"
+                ) { targetState ->
+                    when (targetState) {
+                        is UiState.Loading -> {
+                            MoreQuoteLoading()
+                        }
+
+                        is UiState.Error -> {
+                            ErrorScreen()
+                        }
+
+                        is UiState.Success -> {
+                            MoreQuotesScreenInner(
+                                moreQuotes = targetState.data,
+                            )
+                        }
+                    }
+                }
+            }
+        )
+    }
 }
 
 

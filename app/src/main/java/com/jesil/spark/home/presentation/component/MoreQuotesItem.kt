@@ -105,7 +105,7 @@ fun MoreQuotesItem(
                                 .padding(horizontal = 16.dp),
                             style = MaterialTheme.typography.headlineSmall.copy(
                                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
-                                fontSize = 13.sp,
+                                fontSize = 12.sp,
                                 lineHeight = 16.sp,
                             ),
                             text = quoteItem.author,

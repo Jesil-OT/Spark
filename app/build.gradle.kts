@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.lottie.compose)
 
     implementation ("com.google.code.gson:gson:2.9.1")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
