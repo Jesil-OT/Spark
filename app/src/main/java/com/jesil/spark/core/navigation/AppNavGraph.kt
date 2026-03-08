@@ -29,6 +29,7 @@ import com.jesil.spark.core.navigation.component.ProfileIcon
 import com.jesil.spark.explore_topics.presentation.ExploreTopicsBottomSheet
 import com.jesil.spark.favorites.presentation.FavoritesScreen
 import com.jesil.spark.home.presentation.HomeScreen
+import com.jesil.spark.home.presentation.MoreQuotesScreen
 import com.jesil.spark.onboarding.presentation.GetStartedScreen
 import com.jesil.spark.settings.presentation.SettingsScreen
 import kotlinx.coroutines.launch
@@ -134,7 +135,7 @@ fun AppNavGraph(
                         }
                         Routes.MoreQuotes -> {
                             NavEntry(key) {
-                                // MoreQuotesScreen()
+                                MoreQuotesScreen()
                             }
                         }
                         else -> error("Unknown route: $key")
