@@ -16,7 +16,7 @@ fun ErrorScreen() {
         contentAlignment = Alignment.Center,
         content = {
             AnimatedPreLoader(
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.size(350.dp)
             )
         }
     )

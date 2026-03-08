@@ -1,5 +1,6 @@
 package com.jesil.spark.home.presentation
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -11,9 +12,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -45,20 +50,20 @@ import org.koin.androidx.compose.koinViewModel
 fun MoreQuotesScreen() {
     val viewModel : MoreQuotesViewModel = koinViewModel()
     val state by viewModel.allQuotes.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
     // Listen for one-time error events
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel.errorEvents) {
         viewModel.errorEvents.collect { message ->
-            snackbarHostState.showSnackbar(
+            snackBarHostState.showSnackbar(
                 message = message,
-                duration = SnackbarDuration.Short,
-                actionLabel = "Retry"
+                duration = SnackbarDuration.Long,
+                actionLabel = "Retry",
             )
         }
     }
-
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { padding ->
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -101,11 +106,10 @@ fun MoreQuotesScreenInner(
     modifier: Modifier = Modifier,
     moreQuotes: List<QuoteCardUiModel>,
 ) {
-    LazyVerticalGrid(
+    LazyVerticalStaggeredGrid(
         modifier = modifier,
-        columns = GridCells.Fixed(2),
+        columns = StaggeredGridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         content = {
            items(
@@ -114,6 +118,7 @@ fun MoreQuotesScreenInner(
                key = { it.id },
                itemContent = { quote ->
                    MoreQuotesItem(
+                       modifier = Modifier.padding(vertical = 10.dp),
                        quoteItem = quote,
                        onCardClick = {}
                    )
