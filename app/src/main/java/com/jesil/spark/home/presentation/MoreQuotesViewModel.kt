@@ -17,13 +17,17 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 
+typealias AllQuotesType = StateFlow<UiState<List<QuoteCardUiModel>>>
+
 class MoreQuotesViewModel(
     private val getAllQuotesUseCase: GetAllQuotesUseCase
 ): ViewModel() {
 
     private val _errorEvents = MutableSharedFlow<String>()
     val errorEvents = _errorEvents.asSharedFlow()
-    val allQuotes: StateFlow<UiState> = getAllQuotesUseCase()
+
+
+    val allQuotes: AllQuotesType = getAllQuotesUseCase()
         .map { response ->
             when(response){
                 is NetworkResult.Success -> UiState.Success(response.data.toUiModels())

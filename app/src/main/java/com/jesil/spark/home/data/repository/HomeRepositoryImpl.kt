@@ -1,5 +1,7 @@
 package com.jesil.spark.home.data.repository
 
+import com.jesil.spark.core.data.networking.safeCall
+import com.jesil.spark.core.utils.NetworkResult
 import com.jesil.spark.home.data.local.DailyQuoteDao
 import com.jesil.spark.home.data.local.QuoteDao
 import com.jesil.spark.home.data.mapper.toDomain
@@ -26,23 +28,31 @@ class HomeRepositoryImpl(
     override fun getQuoteById(id: String): Flow<Quote> =
         quoteDao.getQuoteById(id).map { it.toDomain() }
 
-    override fun getQuoteOfTheDay(): Flow<Quote?> =
-        dailyQuoteDao.getDailyQuote().map { it?.toDomain() }
+    override fun getQuoteOfTheDay(): Flow<Quote> =
+        dailyQuoteDao.getDailyQuote().map { it.toDomain() }
 
-    override suspend fun refreshQuotes() {
+    override suspend fun refreshQuotes(): NetworkResult<Unit> {
         // Fetch from network
-        val remoteQuotes = quoteApi.getQuotes()
-        val remoteDailyQuote = quoteApi.getRandomQuote()
+        val remoteQuotes = safeCall{ quoteApi.getQuotes() }
+        val remoteDailyQuote = safeCall{ quoteApi.getRandomQuote() }
 
-        // Save to cache
-//        quoteDao.deleteQuotes()
-        val quoteEntities = remoteQuotes.results.map { remoteQuote -> remoteQuote.toEntity(isDailyQuote = false) }
-        quoteDao.insertQuotes(quoteEntities)
+        // Check if either network call failed
+        if(remoteQuotes is NetworkResult.Error) return NetworkResult.Error(remoteQuotes.message)
+        if(remoteDailyQuote is NetworkResult.Error) return NetworkResult.Error(remoteDailyQuote.message)
 
-//        dailyQuoteDao.deleteDailyQuote()
-        val dailyQuoteEntities = remoteDailyQuote.toEntityDaily(isDailyQuote = true)
-        dailyQuoteDao.insertDailyQuote(dailyQuoteEntities)
+        // If both  network calls succeeded, save to Dao
+        if (remoteQuotes is NetworkResult.Success && remoteDailyQuote is NetworkResult.Success) {
+            quoteDao.deleteQuotes()
+            val quoteEntities = remoteQuotes.data.results.map { remoteQuote -> remoteQuote.toEntity(isDailyQuote = false) }
+            quoteDao.insertQuotes(quoteEntities)
 
+            dailyQuoteDao.deleteDailyQuote()
+            val dailyQuoteEntities = remoteDailyQuote.data.toEntityDaily(isDailyQuote = true)
+            dailyQuoteDao.insertDailyQuote(dailyQuoteEntities)
+
+            return NetworkResult.Success(Unit)
+        }
+
+        return NetworkResult.Error("Unknown Error")
     }
-
 }
