@@ -3,6 +3,12 @@ package com.jesil.spark.home.presentation
 import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,7 +23,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,9 +39,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jesil.spark.R
 import com.jesil.spark.core.theme.SparkTheme
+import com.jesil.spark.core.ui.ErrorScreen
+import com.jesil.spark.core.ui.UiState
 import com.jesil.spark.home.presentation.component.DailyQuoteCard
 import com.jesil.spark.home.presentation.component.HomeLoading
+import com.jesil.spark.home.presentation.component.MoreQuoteLoading
 import com.jesil.spark.home.presentation.component.QuoteItemCard
 import com.jesil.spark.home.presentation.component.SectionHeader
 import com.jesil.spark.home.presentation.model.DailyCardUiModel
@@ -53,22 +65,43 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    LaunchedEffect(viewModel.uiEvent) {
+        viewModel.uiEvent.collect { errorMessage ->
+            snackBarHostState.showSnackbar(
+                errorMessage,
+                duration = SnackbarDuration.Long,
+                actionLabel = context.getString(R.string.retry),
+            ).also { result ->
+                if (result == SnackbarResult.ActionPerformed) {
+                    viewModel.refreshQuotes()
+                }
+            }
+        }
+    }
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     Scaffold(
-        snackbarHost = {},
-    ) {  paddingValues ->
+        snackbarHost = { SnackbarHost(snackBarHostState) }
+    ) { paddingValues ->
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.surface
         ) {
-            when (val currentState = homeUiState) {
-                is HomeUiState.Loading -> {
-                    // Show a loading indicator or placeholder
-                    HomeLoading()
-                }
-                is HomeUiState.Success -> {
-                    HomeInnerScreen(
-                        homeUiModel = currentState.homeUiModel,
+            AnimatedContent(
+                targetState = homeUiState,
+                transitionSpec = {
+                    (fadeIn(animationSpec = tween(500)) + scaleIn(initialScale = 0.92f))
+                        .togetherWith(fadeOut(animationSpec = tween(400)))
+                },
+                label = "HomeUiStateAnimation"
+            ) { targetState ->
+                when (targetState) {
+                    is UiState.Loading -> HomeLoading()
+
+                    is UiState.Error -> ErrorScreen()
+
+                    is UiState.Success ->  HomeInnerScreen(
+                        homeUiModel = targetState.data,
                         onCardClick = { },
                         onFavoriteClick = { },
                         onShareClick = { },
@@ -77,6 +110,7 @@ fun HomeScreen(
                     )
                 }
             }
+
         }
     }
 }

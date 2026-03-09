@@ -85,7 +85,7 @@ fun MoreQuotesScreen() {
                         (fadeIn(animationSpec = tween(500)) + scaleIn(initialScale = 0.92f))
                             .togetherWith(fadeOut(animationSpec = tween(400)))
                     },
-                    label = "UiStateAnimation"
+                    label = "MoreUiStateAnimation"
                 ) { targetState ->
                     when (targetState) {
                         is UiState.Loading -> MoreQuoteLoading()
