@@ -23,18 +23,6 @@ class HomeViewModel(
     private val refreshQuotesUseCase: RefreshQuotesUseCase
 ): ViewModel() {
 
-    //    val homeUiState = getHomeDataUseCase().stateIn(
-//        scope = viewModelScope,
-//        started = SharingStarted.WhileSubscribed(5000L),
-//        initialValue = HomeUiModel(
-//            quoteOfTheDay = DailyCardUiModel(quote = "", author = "", timeStamp = ""),
-//            quotes = emptyList()
-//        )
-//    )
-    // Convert the data flow into a Success state
-
-    private val _events = Channel<String>()
-    val events = _events.receiveAsFlow()
     val homeUiState: StateFlow<HomeUiState> = getHomeDataUseCase().map { homeData ->
         if (homeData.quotes.isEmpty() && homeData.quoteOfTheDay.quote.isEmpty()) {
             delay(10000L)
@@ -42,9 +30,6 @@ class HomeViewModel(
         } else {
             HomeUiState.Success(homeData)
         }
-    }.catch { e ->
-        Timber.e(e)
-       _events.send(e.message ?: "Unknown error")
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000L),

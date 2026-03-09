@@ -1,5 +1,6 @@
 package com.jesil.spark.home.presentation
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -48,14 +49,14 @@ fun HomeScreen(
 ) {
     val viewModel: HomeViewModel = koinViewModel()
     val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
-    val events by viewModel.events.collectAsStateWithLifecycle(initialValue = null)
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     Scaffold(
         snackbarHost = {},
-    ) { paddingValues ->
+    ) {  paddingValues ->
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.surface
@@ -76,23 +77,6 @@ fun HomeScreen(
                     )
                 }
             }
-
-            LaunchedEffect(events) {
-                events?.let { errorMessage ->
-                    // Handle the event
-//                    scope.launch {
-//                        snackBarHostState.showSnackbar(
-//                            message = errorMessage,
-//                            withDismissAction = true,
-//                            actionLabel = "Dismiss",
-//                            duration = SnackbarDuration.Long
-//                        )
-//                    }
-                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-
-                }
-            }
-
         }
     }
 }

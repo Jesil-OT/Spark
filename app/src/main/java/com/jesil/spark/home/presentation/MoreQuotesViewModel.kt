@@ -23,6 +23,7 @@ class MoreQuotesViewModel(
 
     private val _errorEvents = MutableSharedFlow<String>()
     val errorEvents = _errorEvents.asSharedFlow()
+
     val allQuotes: StateFlow<UiState> = getAllQuotesUseCase()
         .map { response ->
             when(response){
