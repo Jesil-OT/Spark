@@ -96,18 +96,20 @@ fun HomeScreen(
                 label = "HomeUiStateAnimation"
             ) { targetState ->
                 when (targetState) {
-                    is UiState.Loading -> HomeLoading()
+                    is UiState.Loading -> { HomeLoading() }
 
-                    is UiState.Error -> ErrorScreen()
+                    is UiState.Error -> { ErrorScreen() }
 
-                    is UiState.Success ->  HomeInnerScreen(
-                        homeUiModel = targetState.data,
-                        onCardClick = { },
-                        onFavoriteClick = { },
-                        onShareClick = { },
-                        onRefreshClick = {},
-                        onSeeMoreClick = onMoreQuotesClick,
-                    )
+                    is UiState.Success -> {
+                        HomeInnerScreen(
+                            homeUiModel = targetState.data,
+                            onCardClick = { },
+                            onFavoriteClick = { },
+                            onShareClick = { },
+                            onRefreshClick = {},
+                            onSeeMoreClick = onMoreQuotesClick,
+                        )
+                    }
                 }
             }
 

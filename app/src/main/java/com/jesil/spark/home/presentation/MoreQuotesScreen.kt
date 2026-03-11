@@ -35,6 +35,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jesil.spark.R
@@ -64,11 +66,17 @@ fun MoreQuotesScreen() {
                 actionLabel = context.getString(R.string.retry),
             ).also { result ->
                 if (result == SnackbarResult.ActionPerformed) {
-                    TODO("Retry the last operation")
+                    viewModel.getAllQuotes()
                 }
             }
         }
     }
+
+    LifecycleEventEffect(
+        event = Lifecycle.Event.ON_CREATE,
+        onEvent = { viewModel.getAllQuotes() }
+    )
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
