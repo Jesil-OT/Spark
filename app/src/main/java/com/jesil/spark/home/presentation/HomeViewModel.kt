@@ -33,13 +33,7 @@ class HomeViewModel(
     val uiEvent = _uiEvent.asSharedFlow()
     val homeUiState: HomeUiStateType = getHomeDataUseCase()
         .map { homeData ->
-            if (homeData.quotes.isEmpty() && homeData.quoteOfTheDay.quote.isEmpty()) {
-                delay(10000L)
-                UiState.Loading
-            } else {
-                UiState.Success(homeData)
-            }
-        }
+            UiState.Success(homeData) as UiState<HomeUiModel>        }
         .catch { e ->
             UiState.Error(e.message ?: "Unknown Error")
             Timber.e(e)
