@@ -18,7 +18,7 @@ class GetHomeDataUseCase(
             flow2 = homeRepository.getQuotes()
         ){ quoteOfTheDay, quotes ->
             HomeUiModel(
-                quoteOfTheDay = quoteOfTheDay.toDailyCardUiModel(),
+                quoteOfTheDay = quoteOfTheDay?.toDailyCardUiModel() ?: DailyCardUiModel() ,
                 quotes = quotes.take(10).map { it.toQuoteCardUiModel() }
             )
         }

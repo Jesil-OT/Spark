@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface DailyQuoteDao {
 
     @Query("SELECT * FROM daily_quotes")
-    fun getDailyQuote(): Flow<DailyQuoteEntity>
+    fun getDailyQuote(): Flow<DailyQuoteEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDailyQuote(quote: DailyQuoteEntity)

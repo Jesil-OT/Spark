@@ -6,8 +6,8 @@ sealed interface HomeUiState{
     data class Success(val homeUiModel: HomeUiModel): HomeUiState
 }
 data class HomeUiModel(
-    val quoteOfTheDay: DailyCardUiModel,
-    val quotes: List<QuoteCardUiModel>,
+    val quoteOfTheDay: DailyCardUiModel = DailyCardUiModel(),
+    val quotes: List<QuoteCardUiModel> = emptyList(),
 )
 
 val fakeHomeUiModel = HomeUiModel(
