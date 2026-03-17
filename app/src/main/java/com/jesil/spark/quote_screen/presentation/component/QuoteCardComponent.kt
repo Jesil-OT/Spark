@@ -1,5 +1,6 @@
 package com.jesil.spark.quote_screen.presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -25,6 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -41,18 +45,21 @@ fun QuoteCardComponent(
     quote: String,
     author: String,
 ) {
+    val cardColors = listOf( MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
+    val gradientBrush = Brush.verticalGradient(cardColors)
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
         ),
         content = {
-            Box {
+            Box(
+                modifier = Modifier.background(brush = gradientBrush)
+            ) {
                 Icon(
                     modifier = Modifier
                         .padding(15.dp)
