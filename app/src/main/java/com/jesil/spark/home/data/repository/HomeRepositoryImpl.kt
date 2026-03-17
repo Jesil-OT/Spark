@@ -28,8 +28,8 @@ class HomeRepositoryImpl(
     override fun getQuoteById(id: String): Flow<Quote> =
         quoteDao.getQuoteById(id).map { it.toDomain() }
 
-    override fun getQuoteOfTheDay(): Flow<Quote> =
-        dailyQuoteDao.getDailyQuote().map { it.toDomain() }
+    override fun getQuoteOfTheDay(): Flow<Quote?> =
+        dailyQuoteDao.getDailyQuote().map { it?.toDomain() }
 
     override suspend fun refreshQuotes(): NetworkResult<Unit> {
         // Fetch from network

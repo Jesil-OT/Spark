@@ -6,22 +6,17 @@ import com.jesil.spark.core.ui.UiState
 import com.jesil.spark.core.utils.NetworkResult
 import com.jesil.spark.home.domain.usecases.GetHomeDataUseCase
 import com.jesil.spark.home.domain.usecases.RefreshQuotesUseCase
-import com.jesil.spark.home.presentation.model.DailyCardUiModel
 import com.jesil.spark.home.presentation.model.HomeUiModel
-import com.jesil.spark.home.presentation.model.HomeUiState
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 typealias HomeUiStateType = StateFlow<UiState<HomeUiModel>>
 class HomeViewModel(
@@ -29,31 +24,45 @@ class HomeViewModel(
     private val refreshQuotesUseCase: RefreshQuotesUseCase
 ): ViewModel() {
 
-    private val _uiEvent = MutableSharedFlow<String>()
-    val uiEvent = _uiEvent.asSharedFlow()
-    val homeUiState: HomeUiStateType = getHomeDataUseCase()
-        .map { homeData ->
-            UiState.Success(homeData) as UiState<HomeUiModel>        }
-        .catch { e ->
-            UiState.Error(e.message ?: "Unknown Error")
-            Timber.e(e)
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000L),
-            initialValue = UiState.Loading
+    private val _uiEvent = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+    val uiEvent: StateFlow<UiState<Unit>> = _uiEvent.asStateFlow()
+
+    private val _errorEvent = MutableSharedFlow<String>()
+    val errorEvent = _errorEvent.asSharedFlow()
+
+    val homeUiState: StateFlow<HomeUiModel> = getHomeDataUseCase()
+    .map { homeData ->
+        HomeUiModel(
+            quoteOfTheDay = homeData.quoteOfTheDay,
+            quotes = homeData.quotes
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = HomeUiModel()
+    )
 
     init {
         refreshQuotes()
     }
 
     fun refreshQuotes()  = viewModelScope.launch {
-        val result = refreshQuotesUseCase()
+        _uiEvent.value = UiState.Loading
 
-        if (result is NetworkResult.Error) {
-            _uiEvent.emit(result.message)
-            UiState.Error(result.message)
+        when(val result = refreshQuotesUseCase()){
+            is NetworkResult.Success -> {
+                _uiEvent.value =  UiState.Success(Unit)
+            }
+            is NetworkResult.Error -> {
+                if (homeUiState.value.quotes.isEmpty()){
+                    _uiEvent.value = UiState.Error(result.message)
+               }else{
+                    _uiEvent.value = UiState.Success(Unit)
+                }
+                _errorEvent.emit(result.message)
+            }
+
         }
     }
+
 }

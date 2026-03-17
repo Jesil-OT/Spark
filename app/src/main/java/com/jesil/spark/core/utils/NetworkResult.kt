@@ -6,6 +6,7 @@ sealed interface NetworkResult<out T> {
         val message: String,
         val exception: Throwable? = null
     ) : NetworkResult<Nothing>
+
 }
 
 inline fun <T, R> NetworkResult<T>.map(transform: (T) -> R): NetworkResult<R> {

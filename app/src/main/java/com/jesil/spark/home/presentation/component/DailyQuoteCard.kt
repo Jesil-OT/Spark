@@ -181,7 +181,7 @@ fun QuoteOfTheDayShape(modifier: Modifier = Modifier) {
                 content = {
                     Text(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        text = "✨ QUOTE OF THE DAY",
+                        text = stringResource(R.string.special_quote),
                         style = MaterialTheme.typography.headlineSmall.copy(
                             color = MaterialTheme.colorScheme.primary,
                             fontSize = 13.sp,

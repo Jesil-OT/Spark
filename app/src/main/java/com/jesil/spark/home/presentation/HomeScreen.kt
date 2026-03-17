@@ -2,7 +2,6 @@ package com.jesil.spark.home.presentation
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -11,15 +10,12 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -32,12 +28,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jesil.spark.R
 import com.jesil.spark.core.theme.SparkTheme
@@ -45,14 +42,10 @@ import com.jesil.spark.core.ui.ErrorScreen
 import com.jesil.spark.core.ui.UiState
 import com.jesil.spark.home.presentation.component.DailyQuoteCard
 import com.jesil.spark.home.presentation.component.HomeLoading
-import com.jesil.spark.home.presentation.component.MoreQuoteLoading
 import com.jesil.spark.home.presentation.component.QuoteItemCard
 import com.jesil.spark.home.presentation.component.SectionHeader
-import com.jesil.spark.home.presentation.model.DailyCardUiModel
 import com.jesil.spark.home.presentation.model.HomeUiModel
-import com.jesil.spark.home.presentation.model.HomeUiState
 import com.jesil.spark.home.presentation.model.fakeHomeUiModel
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -61,12 +54,14 @@ fun HomeScreen(
 ) {
     val viewModel: HomeViewModel = koinViewModel()
     val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
+    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    LaunchedEffect(viewModel.uiEvent) {
-        viewModel.uiEvent.collect { errorMessage ->
+
+    LaunchedEffect(viewModel.errorEvent) {
+        viewModel.errorEvent.collect { errorMessage ->
             snackBarHostState.showSnackbar(
                 errorMessage,
                 duration = SnackbarDuration.Long,
@@ -79,6 +74,11 @@ fun HomeScreen(
         }
     }
 
+    LifecycleEventEffect(
+        event = Lifecycle.Event.ON_CREATE,
+        onEvent = { viewModel.refreshQuotes() }
+    )
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState) }
@@ -88,7 +88,7 @@ fun HomeScreen(
             color = MaterialTheme.colorScheme.surface
         ) {
             AnimatedContent(
-                targetState = homeUiState,
+                targetState = uiEvent,
                 transitionSpec = {
                     (fadeIn(animationSpec = tween(500)) + scaleIn(initialScale = 0.92f))
                         .togetherWith(fadeOut(animationSpec = tween(400)))
@@ -102,7 +102,7 @@ fun HomeScreen(
 
                     is UiState.Success -> {
                         HomeInnerScreen(
-                            homeUiModel = targetState.data,
+                            homeUiModel = homeUiState,
                             onCardClick = { },
                             onFavoriteClick = { },
                             onShareClick = { },
@@ -112,7 +112,6 @@ fun HomeScreen(
                     }
                 }
             }
-
         }
     }
 }
