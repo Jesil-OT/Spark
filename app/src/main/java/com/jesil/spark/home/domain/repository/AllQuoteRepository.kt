@@ -7,5 +7,4 @@ import kotlinx.coroutines.flow.Flow
 interface AllQuoteRepository {
 
     suspend fun getQuotes(): NetworkResult<List<Quote>>
-    suspend fun getQuoteById(id: String): NetworkResult<Quote>
 }

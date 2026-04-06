@@ -11,4 +11,5 @@ sealed class Routes: NavKey {
     @Serializable data object Favorite: Routes()
     @Serializable data object Settings: Routes()
     @Serializable data object MoreQuotes: Routes()
+    @Serializable data class QuoteDetailRoute(val quoteId: Int): Routes()
 }
