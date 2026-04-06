@@ -20,9 +20,4 @@ class AllQuoteRepositoryImpl(
             quotes.results.map { it.toDomainEntity() }
         }
     }
-
-    override suspend fun getQuoteById(id: String): NetworkResult<Quote> {
-        TODO("Not yet implemented")
-    }
-
 }

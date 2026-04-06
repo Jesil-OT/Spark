@@ -10,6 +10,7 @@ import com.jesil.spark.home.data.mapper.toEntityDaily
 import com.jesil.spark.home.data.remote.QuoteApi
 import com.jesil.spark.home.domain.model.Quote
 import com.jesil.spark.home.domain.repository.HomeRepository
+import com.jesil.spark.quote_screen.data.mapper.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
@@ -24,9 +25,6 @@ class HomeRepositoryImpl(
         quoteDao.getQuotes().map { quotes ->
             quotes.map { it.toDomain() }
         }
-
-    override fun getQuoteById(id: String): Flow<Quote> =
-        quoteDao.getQuoteById(id).map { it.toDomain() }
 
     override fun getQuoteOfTheDay(): Flow<Quote?> =
         dailyQuoteDao.getDailyQuote().map { it?.toDomain() }
@@ -43,11 +41,11 @@ class HomeRepositoryImpl(
         // If both  network calls succeeded, save to Dao
         if (remoteQuotes is NetworkResult.Success && remoteDailyQuote is NetworkResult.Success) {
             quoteDao.deleteQuotes()
-            val quoteEntities = remoteQuotes.data.results.map { remoteQuote -> remoteQuote.toEntity(isDailyQuote = false) }
+            val quoteEntities = remoteQuotes.data.results.map { remoteQuote -> remoteQuote.toEntity() }
             quoteDao.insertQuotes(quoteEntities)
 
             dailyQuoteDao.deleteDailyQuote()
-            val dailyQuoteEntities = remoteDailyQuote.data.toEntityDaily(isDailyQuote = true)
+            val dailyQuoteEntities = remoteDailyQuote.data.toEntityDaily()
             dailyQuoteDao.insertDailyQuote(dailyQuoteEntities)
 
             return NetworkResult.Success(Unit)

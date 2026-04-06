@@ -4,6 +4,7 @@ import android.app.Application
 import com.jesil.spark.core.di.coreModule
 import com.jesil.spark.home.di.allQuotesModule
 import com.jesil.spark.home.di.homeModule
+import com.jesil.spark.quote_screen.di.singleQuoteModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -14,7 +15,7 @@ class SparkApplication: Application() {
         Timber.plant(Timber.DebugTree())
         startKoin {
             androidContext(this@SparkApplication)
-            modules(coreModule, homeModule, allQuotesModule)
+            modules(coreModule, homeModule, allQuotesModule, singleQuoteModule)
         }
     }
 }

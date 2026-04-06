@@ -15,15 +15,6 @@ fun DailyQuoteEntity.toDomain(): Quote {
     )
 }
 
-fun QuoteEntity.toDomain(): Quote{
-    return Quote(
-        id = this.id,
-        author = this.author,
-        quote = this.quote,
-        isQuoteOfTheDay = false
-    )
-}
-
 fun QuoteItemDto.toEntity(isDailyQuote: Boolean = false): QuoteEntity{
     return QuoteEntity(
         id = this.id,
@@ -32,7 +23,7 @@ fun QuoteItemDto.toEntity(isDailyQuote: Boolean = false): QuoteEntity{
     )
 }
 
-fun QuoteItemDto.toEntityDaily(isDailyQuote: Boolean = false): DailyQuoteEntity{
+fun QuoteItemDto.toEntityDaily(): DailyQuoteEntity{
     return DailyQuoteEntity(
         id = this.id,
         author = this.author,
@@ -41,7 +32,7 @@ fun QuoteItemDto.toEntityDaily(isDailyQuote: Boolean = false): DailyQuoteEntity{
     )
 }
 
-fun QuoteItemDto.toDomainEntity(isDailyQuote: Boolean = false): Quote{
+fun QuoteItemDto.toDomainEntity(): Quote{
     return Quote(
         id = this.id,
         author = this.author,

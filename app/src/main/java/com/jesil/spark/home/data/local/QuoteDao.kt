@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.jesil.spark.home.data.local.model.DailyQuoteEntity
 import com.jesil.spark.home.data.local.model.QuoteEntity
 import kotlinx.coroutines.flow.Flow
@@ -22,4 +23,10 @@ interface QuoteDao{
 
     @Query("DELETE FROM quotes")
     suspend fun deleteQuotes()
+
+    @Query("DELETE FROM quotes WHERE id = :id")
+    suspend fun deleteQuoteById(id: String)
+
+    @Update
+    suspend fun updateQuote(quote: QuoteEntity)
 }

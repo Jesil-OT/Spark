@@ -54,14 +54,6 @@ fun AppNavGraph(
             ) {
                 TopAppBar(
                         title = {
-//                            Text(
-//                                text = stringResource(R.string.spark),
-//                                style = MaterialTheme.typography.displayMedium.copy(
-//                                    color = MaterialTheme.colorScheme.primary,
-//                                    fontWeight = FontWeight.Bold,
-//                                    fontSize = 25.sp,
-//                                ),
-//                            )
                             Icon(
                                 modifier = Modifier.size(30.dp),
                                 imageVector = ImageVector.vectorResource(R.drawable.outline_format_quote),
