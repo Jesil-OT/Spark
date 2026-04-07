@@ -8,5 +8,7 @@ interface SingleQuoteRepository {
 
     fun getQuoteById(id: String): Flow<Quote?>
 
+    fun getSpecialQuoteById(id: String): Flow<Quote?>
+
     suspend fun refreshQuote(id: String): NetworkResult<Unit>
 }
