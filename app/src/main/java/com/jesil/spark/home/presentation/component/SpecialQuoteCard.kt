@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -42,15 +43,15 @@ import com.jesil.spark.home.presentation.model.DailyCardUiModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DailyQuoteCard(
+fun SpecialQuoteCard(
     modifier: Modifier = Modifier,
     dailyCardUiModel: DailyCardUiModel,
-    onCardClick: () -> Unit,
+    onQuoteClicked: (id: String, specialQuote: Boolean) -> Unit,
     onFavoriteClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
     Card(
-        modifier = modifier.clickable { onCardClick() },
+        modifier = modifier.clickable { onQuoteClicked(dailyCardUiModel.id, true) },
         shape = RoundedCornerShape(30.dp),
         colors = CardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -70,7 +71,7 @@ fun DailyQuoteCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     content = {
-                        QuoteOfTheDayShape()
+                        SpecialQuoteShape()
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
                             text = dailyCardUiModel.timeStamp,
@@ -168,13 +169,18 @@ fun DailyQuoteCard(
 }
 
 @Composable
-fun QuoteOfTheDayShape(modifier: Modifier = Modifier) {
+fun SpecialQuoteShape(
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+    border: BorderStroke = BorderStroke(2.dp, Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary))),
+    textColor: Color = MaterialTheme.colorScheme.primary
+) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(30.dp),
-        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+        color = color,
         tonalElevation = 20.dp,
-        border = BorderStroke(2.dp, Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary))),
+        border = border,
         content = {
             Box(
                 contentAlignment = Alignment.Center,
@@ -183,7 +189,7 @@ fun QuoteOfTheDayShape(modifier: Modifier = Modifier) {
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                         text = stringResource(R.string.special_quote),
                         style = MaterialTheme.typography.headlineSmall.copy(
-                            color = MaterialTheme.colorScheme.primary,
+                            color = textColor,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -197,15 +203,15 @@ fun QuoteOfTheDayShape(modifier: Modifier = Modifier) {
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Preview()
 @Composable
-private fun DailyQuoteCardPreview() {
+private fun SpecialQuoteCardPreview() {
     SparkTheme {
-        DailyQuoteCard(
+        SpecialQuoteCard(
             dailyCardUiModel = DailyCardUiModel(
                 quote = "Happiness is not something ready-made. It comes from your own actions.",
                 author = "Dalai Lama",
                 timeStamp = "Oct 24, 2026"
             ),
-            onCardClick = {},
+            onQuoteClicked = {_,_ -> },
             onFavoriteClick = {},
             onShareClick = {}
         )

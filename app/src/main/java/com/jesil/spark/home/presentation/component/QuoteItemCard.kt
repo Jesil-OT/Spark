@@ -41,10 +41,10 @@ fun QuoteItemCard(
     quoteCard: QuoteCardUiModel,
     onFavoriteClick: () -> Unit,
     onShareClick: () -> Unit,
-    onCardClick: () -> Unit
+    onQuoteClicked: (id: String, specialQuote: Boolean) -> Unit
 ) {
     Card(
-        modifier = modifier.clickable { onCardClick() },
+        modifier = modifier.clickable { onQuoteClicked(quoteCard.id, false) },
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -156,7 +156,7 @@ fun QuoteItemCardPreview() {
             ),
             onFavoriteClick = {},
             onShareClick = {},
-            onCardClick = {}
+            onQuoteClicked = {_,_ ->}
         )
     }
 }

@@ -47,6 +47,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun QuoteScreen(
     id: String,
+    isSpecialQuote: Boolean,
     onBackClick: () -> Unit
 ) {
     val viewModel: QuoteViewModel = koinViewModel()
@@ -90,7 +91,8 @@ fun QuoteScreen(
     ) {
         QuoteScreenInner(
            values =  it,
-            state = quoteUiState
+            state = quoteUiState,
+            isSpecialQuote = isSpecialQuote
         )
     }
 
@@ -99,7 +101,8 @@ fun QuoteScreen(
 @Composable
 private fun QuoteScreenInner(
     values: PaddingValues,
-    state: QuoteUiModel
+    state: QuoteUiModel,
+    isSpecialQuote: Boolean
 ) {
     Surface(
         modifier = Modifier
@@ -113,7 +116,8 @@ private fun QuoteScreenInner(
                     .weight(1f)
                     .padding(30.dp),
                 quote = state.quote,
-                author = state.author
+                author = state.author,
+                isQuoteSpecial = isSpecialQuote
             )
             Spacer(modifier = Modifier.height(20.dp))
             QuoteScreenActionComponent(
@@ -136,7 +140,8 @@ fun QuoteScreenPreview(modifier: Modifier = Modifier) {
     SparkTheme{
         QuoteScreenInner(
             values = PaddingValues(),
-            state = fakeQuote
+            state = fakeQuote,
+            isSpecialQuote = true
         )
     }
 }

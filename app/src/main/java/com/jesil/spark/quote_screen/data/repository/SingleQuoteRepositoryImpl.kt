@@ -18,8 +18,8 @@ class SingleQuoteRepositoryImpl(
     private val quoteDao: QuoteDao
 ): SingleQuoteRepository {
 
-    override fun getQuoteById(id: String): Flow<Quote> =
-        quoteDao.getQuoteById(id).map { it.toDomain() }
+    override fun getQuoteById(id: String): Flow<Quote?> =
+        quoteDao.getQuoteById(id).map { it?.toDomain() }
 
     override suspend fun refreshQuote(id: String): NetworkResult<Unit> {
         // Fetch from network
@@ -28,7 +28,7 @@ class SingleQuoteRepositoryImpl(
         if(remoteSingleQuote is NetworkResult.Error) return NetworkResult.Error(remoteSingleQuote.message)
 
         if (remoteSingleQuote is NetworkResult.Success) {
-            quoteDao.deleteQuoteById(id)
+//            quoteDao.deleteQuoteById(id)
             val quoteEntity = remoteSingleQuote.data.toEntity()
             quoteDao.updateQuote(quoteEntity)
 

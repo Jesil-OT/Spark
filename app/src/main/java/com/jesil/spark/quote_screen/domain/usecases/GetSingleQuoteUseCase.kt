@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 class GetSingleQuoteUseCase(
     private val singleQuoteRepository: SingleQuoteRepository
 ) {
-    operator fun invoke(id: String): Flow<QuoteUiModel> {
-        return singleQuoteRepository.getQuoteById(id = id).map { it.toUiModel() }
+    operator fun invoke(id: String): Flow<QuoteUiModel?> {
+        return singleQuoteRepository.getQuoteById(id = id).map { it?.toUiModel() }
     }
 }
