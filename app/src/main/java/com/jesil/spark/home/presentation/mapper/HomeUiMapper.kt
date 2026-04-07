@@ -15,6 +15,7 @@ fun Quote.toQuoteCardUiModel(): QuoteCardUiModel{
 
 fun Quote.toDailyCardUiModel(): DailyCardUiModel {
     return DailyCardUiModel(
+        id = this.id,
         quote = this.quote,
         author = this.author,
         timeStamp = DateFormat.getDateInstance().format(this.date)

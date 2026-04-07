@@ -30,35 +30,34 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jesil.spark.R
 import com.jesil.spark.core.theme.SparkTheme
 import com.jesil.spark.core.ui.ErrorScreen
 import com.jesil.spark.core.ui.UiState
-import com.jesil.spark.home.presentation.component.DailyQuoteCard
+import com.jesil.spark.home.presentation.component.SpecialQuoteCard
 import com.jesil.spark.home.presentation.component.HomeLoading
 import com.jesil.spark.home.presentation.component.QuoteItemCard
 import com.jesil.spark.home.presentation.component.SectionHeader
 import com.jesil.spark.home.presentation.model.HomeUiModel
 import com.jesil.spark.home.presentation.model.fakeHomeUiModel
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun HomeScreen(
     onMoreQuotesClick: () -> Unit = {},
+    onQuoteClicked: (id: String, specialQuote: Boolean) -> Unit = {_,_ -> },
 ) {
     val viewModel: HomeViewModel = koinViewModel()
     val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
     val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
-
 
     LaunchedEffect(viewModel.errorEvent) {
         viewModel.errorEvent.collect { errorMessage ->
@@ -73,11 +72,6 @@ fun HomeScreen(
             }
         }
     }
-
-    LifecycleEventEffect(
-        event = Lifecycle.Event.ON_CREATE,
-        onEvent = { viewModel.refreshQuotes() }
-    )
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     Scaffold(
@@ -103,7 +97,7 @@ fun HomeScreen(
                     is UiState.Success -> {
                         HomeInnerScreen(
                             homeUiModel = homeUiState,
-                            onCardClick = { },
+                            onQuoteClicked = onQuoteClicked,
                             onFavoriteClick = { },
                             onShareClick = { },
                             onRefreshClick = {},
@@ -120,7 +114,7 @@ fun HomeScreen(
 fun HomeInnerScreen(
     modifier: Modifier = Modifier,
     homeUiModel: HomeUiModel,
-    onCardClick: () -> Unit,
+    onQuoteClicked: (id: String, specialQuote: Boolean) -> Unit,
     onFavoriteClick: () -> Unit,
     onShareClick: () -> Unit,
     onRefreshClick: () -> Unit,
@@ -136,9 +130,9 @@ fun HomeInnerScreen(
                 SectionHeader(title = "Daily Spark")
             }
             item {
-                DailyQuoteCard(
+                SpecialQuoteCard(
                     dailyCardUiModel = homeUiModel.quoteOfTheDay,
-                    onCardClick = {},
+                    onQuoteClicked = onQuoteClicked,
                     onFavoriteClick = {},
                     onShareClick = {}
                 )
@@ -147,7 +141,7 @@ fun HomeInnerScreen(
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 SectionHeader(
-                    title = "Recent Inspirations",
+                    title = stringResource(R.string.recent_inspirations),
                     textSize = 24.sp,
                     showExtra = true,
                     onExtraClick = onSeeMoreClick
@@ -162,7 +156,7 @@ fun HomeInnerScreen(
                         quoteCard = quote,
                         onFavoriteClick = onFavoriteClick,
                         onShareClick = onShareClick,
-                        onCardClick = onCardClick
+                        onQuoteClicked = onQuoteClicked
                     )
                 }
             )
@@ -179,7 +173,7 @@ fun HomeScreenPreview() {
         HomeInnerScreen(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface),
             homeUiModel = fakeHomeUiModel,
-            onCardClick = {},
+            onQuoteClicked = { _, _ -> },
             onFavoriteClick = {},
             onShareClick = {},
             onRefreshClick = {},

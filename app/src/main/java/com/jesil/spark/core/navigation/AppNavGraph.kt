@@ -31,6 +31,7 @@ import com.jesil.spark.favorites.presentation.FavoritesScreen
 import com.jesil.spark.home.presentation.HomeScreen
 import com.jesil.spark.home.presentation.MoreQuotesScreen
 import com.jesil.spark.onboarding.presentation.GetStartedScreen
+import com.jesil.spark.quote_screen.presentation.QuoteScreen
 import com.jesil.spark.settings.presentation.SettingsScreen
 import kotlinx.coroutines.launch
 
@@ -103,16 +104,19 @@ fun AppNavGraph(
                     when (key) {
                         Routes.GetStartedScreen -> {
                             NavEntry(key){
-                                GetStartedScreen(){
+                                GetStartedScreen {
                                     backStack.add(Routes.Home)
                                 }
                             }
                         }
                         Routes.Home -> {
                             NavEntry(key){
-                                HomeScreen(){
-                                    backStack.add(Routes.MoreQuotes)
-                                }
+                                HomeScreen(
+                                    onMoreQuotesClick = {backStack.add(Routes.MoreQuotes) },
+                                    onQuoteClicked = {id, specialQuote ->
+                                        backStack.add(Routes.QuoteDetailRoute(id = id, isSpecialQuote = specialQuote))
+                                    }
+                                )
                             }
                         }
                         Routes.Favorite -> {
@@ -127,7 +131,20 @@ fun AppNavGraph(
                         }
                         Routes.MoreQuotes -> {
                             NavEntry(key) {
-                                MoreQuotesScreen()
+                                MoreQuotesScreen{ id ->
+                                    backStack.add(Routes.QuoteDetailRoute(id = id, isSpecialQuote = false))
+                                }
+                            }
+                        }
+                        is Routes.QuoteDetailRoute -> {
+                            NavEntry(key) {navKey ->
+                                QuoteScreen(
+                                    id = (navKey as Routes.QuoteDetailRoute).id,
+                                    isSpecialQuote = navKey.isSpecialQuote,
+                                    onBackClick = {
+                                        backStack.removeLastOrNull()
+                                    }
+                                )
                             }
                         }
                         else -> error("Unknown route: $key")

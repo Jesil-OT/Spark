@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SingleQuoteRepository {
 
-    fun getQuoteById(id: String): Flow<Quote>
+    fun getQuoteById(id: String): Flow<Quote?>
 
     suspend fun refreshQuote(id: String): NetworkResult<Unit>
 }

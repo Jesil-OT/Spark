@@ -1,7 +1,6 @@
 package com.jesil.spark.home.presentation
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -13,9 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -32,27 +28,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jesil.spark.R
 import com.jesil.spark.core.theme.SparkTheme
 import com.jesil.spark.core.ui.ErrorScreen
 import com.jesil.spark.core.ui.UiState
 import com.jesil.spark.home.presentation.component.MoreQuoteLoading
 import com.jesil.spark.home.presentation.component.MoreQuotesItem
-import com.jesil.spark.home.presentation.component.SectionHeader
-import com.jesil.spark.home.presentation.model.HomeUiModel
 import com.jesil.spark.home.presentation.model.QuoteCardUiModel
 import com.jesil.spark.home.presentation.model.fakeHomeUiModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun MoreQuotesScreen() {
+fun MoreQuotesScreen(
+    onQuoteClick: (id: String) -> Unit = {}
+) {
     val viewModel : MoreQuotesViewModel = koinViewModel()
     val state by viewModel.allQuotes.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -102,6 +96,7 @@ fun MoreQuotesScreen() {
 
                         is UiState.Success -> MoreQuotesScreenInner(
                                 moreQuotes = targetState.data,
+                                onQuoteClick = onQuoteClick
                             )
 
                     }
@@ -116,6 +111,7 @@ fun MoreQuotesScreen() {
 fun MoreQuotesScreenInner(
     modifier: Modifier = Modifier,
     moreQuotes: List<QuoteCardUiModel>,
+    onQuoteClick: (id: String) -> Unit
 ) {
     LazyVerticalStaggeredGrid(
         modifier = modifier,
@@ -131,7 +127,7 @@ fun MoreQuotesScreenInner(
                    MoreQuotesItem(
                        modifier = Modifier.padding(vertical = 10.dp),
                        quoteItem = quote,
-                       onCardClick = {}
+                       onQuoteClicked = onQuoteClick
                    )
                }
            )
@@ -145,7 +141,8 @@ private fun MoreQuotesScreenPreview() {
     SparkTheme {
         MoreQuotesScreenInner(
             moreQuotes = fakeHomeUiModel.quotes,
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+            onQuoteClick = {}
         )
     }
 }
