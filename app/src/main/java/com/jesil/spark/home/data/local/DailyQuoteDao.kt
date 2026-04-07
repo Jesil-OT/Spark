@@ -13,6 +13,9 @@ interface DailyQuoteDao {
     @Query("SELECT * FROM daily_quotes")
     fun getDailyQuote(): Flow<DailyQuoteEntity?>
 
+    @Query("SELECT * FROM daily_quotes WHERE id = :id")
+    fun getDailyQuoteById(id: String): Flow<DailyQuoteEntity?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDailyQuote(quote: DailyQuoteEntity)
 

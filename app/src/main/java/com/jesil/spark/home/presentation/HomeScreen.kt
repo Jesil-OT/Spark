@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -23,6 +24,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -98,9 +100,10 @@ fun HomeScreen(
                         HomeInnerScreen(
                             homeUiModel = homeUiState,
                             onQuoteClicked = onQuoteClicked,
+                            isRefreshing = uiEvent is UiState.Loading,
                             onFavoriteClick = { },
                             onShareClick = { },
-                            onRefreshClick = {},
+                            onRefreshClick = { viewModel.refreshQuotes() },
                             onSeeMoreClick = onMoreQuotesClick,
                         )
                     }
@@ -110,56 +113,65 @@ fun HomeScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeInnerScreen(
     modifier: Modifier = Modifier,
     homeUiModel: HomeUiModel,
+    isRefreshing: Boolean,
     onQuoteClicked: (id: String, specialQuote: Boolean) -> Unit,
     onFavoriteClick: () -> Unit,
     onShareClick: () -> Unit,
     onRefreshClick: () -> Unit,
     onSeeMoreClick: () -> Unit
 ) {
-    // multi-item DSL approach
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefreshClick,
         content = {
-            item {
-                SectionHeader(title = "Daily Spark")
-            }
-            item {
-                SpecialQuoteCard(
-                    dailyCardUiModel = homeUiModel.quoteOfTheDay,
-                    onQuoteClicked = onQuoteClicked,
-                    onFavoriteClick = {},
-                    onShareClick = {}
-                )
-            }
-            // --- Section 2: Explore Quotes ---
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                SectionHeader(
-                    title = stringResource(R.string.recent_inspirations),
-                    textSize = 24.sp,
-                    showExtra = true,
-                    onExtraClick = onSeeMoreClick
-                )
-            }
-            items(
-                items = homeUiModel.quotes,
-                // Providing a key helps with scroll performance and animations
-                key = { it.id },
-                itemContent = { quote ->
-                    QuoteItemCard(
-                        quoteCard = quote,
-                        onFavoriteClick = onFavoriteClick,
-                        onShareClick = onShareClick,
-                        onQuoteClicked = onQuoteClicked
+            // multi-item DSL approach
+            LazyColumn(
+                modifier = modifier,
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                content = {
+                    item {
+                        SectionHeader(title = stringResource(R.string.daily_spark))
+                    }
+                    item {
+                        SpecialQuoteCard(
+                            dailyCardUiModel = homeUiModel.quoteOfTheDay,
+                            onQuoteClicked = onQuoteClicked,
+                            onFavoriteClick = {},
+                            onShareClick = {}
+                        )
+                    }
+                    // --- Section 2: Explore Quotes ---
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        SectionHeader(
+                            title = stringResource(R.string.recent_inspirations),
+                            textSize = 24.sp,
+                            showExtra = true,
+                            onExtraClick = onSeeMoreClick
+                        )
+                    }
+                    items(
+                        items = homeUiModel.quotes,
+                        // Providing a key helps with scroll performance and animations
+                        key = { it.id },
+                        itemContent = { quote ->
+                            QuoteItemCard(
+                                quoteCard = quote,
+                                onFavoriteClick = onFavoriteClick,
+                                onShareClick = onShareClick,
+                                onQuoteClicked = onQuoteClicked
+                            )
+                        }
                     )
                 }
             )
+
         }
     )
 }
@@ -173,6 +185,7 @@ fun HomeScreenPreview() {
         HomeInnerScreen(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface),
             homeUiModel = fakeHomeUiModel,
+            isRefreshing = false,
             onQuoteClicked = { _, _ -> },
             onFavoriteClick = {},
             onShareClick = {},

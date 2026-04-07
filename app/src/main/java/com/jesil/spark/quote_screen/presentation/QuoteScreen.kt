@@ -41,6 +41,7 @@ import com.jesil.spark.quote_screen.presentation.component.QuoteScreenActionComp
 import com.jesil.spark.quote_screen.presentation.model.QuoteUiModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -57,7 +58,10 @@ fun QuoteScreen(
 
     LifecycleEventEffect(
         event = Lifecycle.Event.ON_CREATE,
-        onEvent = { viewModel.refreshQuote(id) }
+        onEvent = {
+            viewModel.refreshQuote(id)
+            Timber.e("Current quote is $quoteUiState and id is $id")
+        }
     )
 
     Scaffold(
